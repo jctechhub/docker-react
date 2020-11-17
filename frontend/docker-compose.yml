@@ -1,0 +1,31 @@
+version: '3'
+services: 
+  web:
+    environment:
+      # this makes it autorefresh
+      - CHOKIDAR_USEPOLLING=true  
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5010:3000"
+    volumes: 
+      - /app/node_modules
+      - .:/app
+  tests:
+    environment:
+      # this makes it autorefresh
+      - CHOKIDAR_USEPOLLING=true  
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev   
+    volumes: 
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
+
+    # note: the above test is one solution. 
+    # the other solution is to
+    # a. fire up docker-compose: docker-compose up
+    # b. copy the container id, and run: 
+    # docker exec -it 12121212 npm run test      
